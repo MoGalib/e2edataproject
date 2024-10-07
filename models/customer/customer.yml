@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: customer
+    description: "Customer model"
+    columns:
+      - name: Customer_ID
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+      - name: Email_Address
+        description: "Email address of customers"
+        tests:
+          - not_null

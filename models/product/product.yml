@@ -1,0 +1,16 @@
+# models/product.yml
+version: 2
+models:
+  - name: product
+    description: "Product model"
+    columns:
+      - name: Product_ID
+        description: "The primary key for this table"
+        tests:
+          - unique
+          - not_null
+
+      - name: Product_Category_ID
+        description: "Category id of the products"
+        tests:
+          - not_null
