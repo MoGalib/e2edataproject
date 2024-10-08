@@ -1,0 +1,9 @@
+{
+	"name": "end2enddatafactory",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "a3b76a19-6c48-4b38-84c2-c4647bf8fb70",
+		"tenantId": "9cac8ebd-3b13-4c80-a857-3d809b69880b"
+	}
+}

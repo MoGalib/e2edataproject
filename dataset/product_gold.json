@@ -1,0 +1,68 @@
+{
+	"name": "product_gold",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeGold",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "PRODUCT_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "PRODUCT_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PRODUCT_NUMBER",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "COLOR",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "STANDARD_COST",
+				"type": "NUMBER",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "LIST_PRICE",
+				"type": "NUMBER",
+				"precision": 10,
+				"scale": 2
+			},
+			{
+				"name": "SIZE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "WEIGHT",
+				"type": "NUMBER",
+				"precision": 10,
+				"scale": 3
+			},
+			{
+				"name": "PRODUCT_CATEGORY_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "PRODUCT_CATEGORY_NAME",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD_LAYER",
+			"table": "PRODUCT"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

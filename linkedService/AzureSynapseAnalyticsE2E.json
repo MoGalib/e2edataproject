@@ -1,0 +1,15 @@
+{
+	"name": "AzureSynapseAnalyticsE2E",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"server": "e2esynapse.sql.azuresynapse.net",
+			"database": "e2esynapsesqlpool",
+			"encrypt": "optional",
+			"trustServerCertificate": true,
+			"authenticationType": "SystemAssignedManagedIdentity"
+		}
+	}
+}

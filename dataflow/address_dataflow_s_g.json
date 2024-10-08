@@ -1,0 +1,91 @@
+{
+	"name": "address_dataflow_s_g",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "address_silver",
+						"type": "DatasetReference"
+					},
+					"name": "addresssilver"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Snowflakegold",
+						"type": "DatasetReference"
+					},
+					"name": "addressgold",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureDataLake_product_table",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "addresssilverselect"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          AddressID as integer,",
+				"          AddressLine1 as string,",
+				"          AddressLine2 as string,",
+				"          City as string,",
+				"          StateProvince as string,",
+				"          PostalCode as string,",
+				"          CountryRegion as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> addresssilver",
+				"addresssilver select(mapColumn(",
+				"          Address_ID = AddressID,",
+				"          Address_Line1 = AddressLine1,",
+				"          Address_Line2 = AddressLine2,",
+				"          City,",
+				"          State_Province = StateProvince,",
+				"          Postal_Code = PostalCode,",
+				"          Country_Region = CountryRegion,",
+				"          Modified_Date = ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> addresssilverselect",
+				"addresssilverselect sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ADDRESS_ID as string,",
+				"          ADDRESS_LINE1 as string,",
+				"          ADDRESS_LINE2 as string,",
+				"          CITY as string,",
+				"          STATE_PROVINCE as string,",
+				"          POSTAL_CODE as string,",
+				"          COUNTRY_REGION as string,",
+				"          MODIFIED_DATE as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          ADDRESS_ID = Address_ID,",
+				"          ADDRESS_LINE1 = Address_Line1,",
+				"          ADDRESS_LINE2 = Address_Line2,",
+				"          CITY = City,",
+				"          STATE_PROVINCE = State_Province,",
+				"          POSTAL_CODE = Postal_Code,",
+				"          COUNTRY_REGION = Country_Region",
+				"     )) ~> addressgold"
+			]
+		}
+	}
+}

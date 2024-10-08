@@ -1,0 +1,40 @@
+{
+	"name": "snowflakecustomergold",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeGold",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "CUSTOMER_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "FIRST_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LAST_NAME",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "EMAIL_ADDRESS",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "PHONE",
+				"type": "VARCHAR"
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD_LAYER",
+			"table": "CUSTOMER"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

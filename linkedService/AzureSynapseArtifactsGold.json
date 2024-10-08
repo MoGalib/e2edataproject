@@ -1,0 +1,13 @@
+{
+	"name": "AzureSynapseArtifactsGold",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSynapseArtifacts",
+		"typeProperties": {
+			"endpoint": "https://e2esynapse.dev.azuresynapse.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/a4778e33-4806-4ad8-8eca-51d36a2792a9/resourceGroups/end2enddeproject/providers/Microsoft.Synapse/workspaces/e2esynapse"
+		}
+	}
+}

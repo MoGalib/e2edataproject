@@ -1,0 +1,90 @@
+{
+	"name": "sod_dataflow_s_g",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sod_silver",
+						"type": "DatasetReference"
+					},
+					"name": "sodsilver"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sod_gold",
+						"type": "DatasetReference"
+					},
+					"name": "sodgold"
+				}
+			],
+			"transformations": [
+				{
+					"name": "sodsilverselect"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          SalesOrderID as integer,",
+				"          SalesOrderDetailID as integer,",
+				"          OrderQty as integer,",
+				"          ProductID as integer,",
+				"          ProductName as string,",
+				"          ProductCategoryName as string,",
+				"          UnitPrice as decimal(19,4),",
+				"          LineTotal as decimal(38,6),",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sodsilver",
+				"sodsilver select(mapColumn(",
+				"          Sales_Order_ID = SalesOrderID,",
+				"          Sales_Order_Detail_ID = SalesOrderDetailID,",
+				"          Order_Qty = OrderQty,",
+				"          Product_ID = ProductID,",
+				"          Product_Name = ProductName,",
+				"          Product_Category_Name = ProductCategoryName,",
+				"          Unit_Price = UnitPrice,",
+				"          Line_Total = LineTotal,",
+				"          Modified_Date = ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sodsilverselect",
+				"sodsilverselect sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SALES_ORDER_ID as string,",
+				"          SALES_ORDER_DETAIL_ID as string,",
+				"          ORDER_QTY as string,",
+				"          PRODUCT_ID as string,",
+				"          PRODUCT_NAME as string,",
+				"          PRODUCT_CATEGORY_NAME as string,",
+				"          UNIT_PRICE as string,",
+				"          LINE_TOTAL as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          SALES_ORDER_ID = Sales_Order_ID,",
+				"          SALES_ORDER_DETAIL_ID = Sales_Order_Detail_ID,",
+				"          ORDER_QTY = Order_Qty,",
+				"          PRODUCT_ID = Product_ID,",
+				"          PRODUCT_NAME = Product_Name,",
+				"          PRODUCT_CATEGORY_NAME = Product_Category_Name,",
+				"          UNIT_PRICE = Unit_Price,",
+				"          LINE_TOTAL = Line_Total",
+				"     )) ~> sodgold"
+			]
+		}
+	}
+}

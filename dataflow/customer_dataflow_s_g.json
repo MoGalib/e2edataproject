@@ -1,0 +1,78 @@
+{
+	"name": "customer_dataflow_s_g",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "customer_silver",
+						"type": "DatasetReference"
+					},
+					"name": "customersilver"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "snowflakecustomergold",
+						"type": "DatasetReference"
+					},
+					"name": "customergold"
+				}
+			],
+			"transformations": [
+				{
+					"name": "customersilverselect"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CustomerID as integer,",
+				"          FirstName as string,",
+				"          LastName as string,",
+				"          EmailAddress as string,",
+				"          Phone as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> customersilver",
+				"customersilver select(mapColumn(",
+				"          Customer_ID = CustomerID,",
+				"          First_Name = FirstName,",
+				"          Last_Name = LastName,",
+				"          Email_Address = EmailAddress,",
+				"          Phone,",
+				"          Modified_Date = ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> customersilverselect",
+				"customersilverselect sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          CUSTOMER_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          EMAIL_ADDRESS as string,",
+				"          PHONE as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          CUSTOMER_ID = Customer_ID,",
+				"          FIRST_NAME = First_Name,",
+				"          LAST_NAME = Last_Name,",
+				"          EMAIL_ADDRESS = Email_Address,",
+				"          PHONE = Phone",
+				"     )) ~> customergold"
+			]
+		}
+	}
+}

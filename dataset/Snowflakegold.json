@@ -1,0 +1,52 @@
+{
+	"name": "Snowflakegold",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SnowflakeGold",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "ADDRESS_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "ADDRESS_LINE1",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ADDRESS_LINE2",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "CITY",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "STATE_PROVINCE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "POSTAL_CODE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "COUNTRY_REGION",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "MODIFIED_DATE",
+				"type": "TIMESTAMP_NTZ"
+			}
+		],
+		"typeProperties": {
+			"schema": "GOLD_LAYER",
+			"table": "ADDRESS"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

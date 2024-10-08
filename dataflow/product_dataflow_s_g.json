@@ -1,0 +1,102 @@
+{
+	"name": "product_dataflow_s_g",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "product_silver",
+						"type": "DatasetReference"
+					},
+					"name": "productsilver"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "product_gold",
+						"type": "DatasetReference"
+					},
+					"name": "productgold"
+				}
+			],
+			"transformations": [
+				{
+					"name": "productsilverselect"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ProductID as integer,",
+				"          ProductName as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as decimal(19,4),",
+				"          ListPrice as decimal(19,4),",
+				"          Size as string,",
+				"          Weight as decimal(8,2),",
+				"          SellStartDate as timestamp,",
+				"          SellEndDate as timestamp,",
+				"          ProductModifiedDate as timestamp,",
+				"          ProductCategoryID as integer,",
+				"          ProductCategoryName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> productsilver",
+				"productsilver select(mapColumn(",
+				"          Product_ID = ProductID,",
+				"          Product_Name = ProductName,",
+				"          Product_Number = ProductNumber,",
+				"          Color,",
+				"          Standard_Cost = StandardCost,",
+				"          List_Price = ListPrice,",
+				"          Size,",
+				"          Weight,",
+				"          Sell_Start_Date = SellStartDate,",
+				"          Sell_End_Date = SellEndDate,",
+				"          Product_Modified_Date = ProductModifiedDate,",
+				"          Product_Category_ID = ProductCategoryID,",
+				"          Product_Category_Name = ProductCategoryName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> productsilverselect",
+				"productsilverselect sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          PRODUCT_ID as string,",
+				"          PRODUCT_NAME as string,",
+				"          PRODUCT_NUMBER as string,",
+				"          COLOR as string,",
+				"          STANDARD_COST as string,",
+				"          LIST_PRICE as string,",
+				"          SIZE as string,",
+				"          WEIGHT as string,",
+				"          PRODUCT_CATEGORY_ID as string,",
+				"          PRODUCT_CATEGORY_NAME as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          PRODUCT_ID = Product_ID,",
+				"          PRODUCT_NAME = Product_Name,",
+				"          PRODUCT_NUMBER = Product_Number,",
+				"          COLOR = Color,",
+				"          STANDARD_COST = Standard_Cost,",
+				"          LIST_PRICE = List_Price,",
+				"          SIZE = Size,",
+				"          WEIGHT = Weight,",
+				"          PRODUCT_CATEGORY_ID = Product_Category_ID,",
+				"          PRODUCT_CATEGORY_NAME = Product_Category_Name",
+				"     )) ~> productgold"
+			]
+		}
+	}
+}
